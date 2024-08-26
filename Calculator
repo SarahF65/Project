@@ -1,0 +1,69 @@
+import java.util.Scanner;
+import javax.swing.JOptionPane;
+import java.util.ArrayList;
+
+public class javaCalculator {
+
+    public static void main(String[] args) {
+
+        ArrayList<Integer> numbers = new ArrayList<Integer>();
+        int result = 0;
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Please enter input 1:");
+        numbers.add(scanner.nextInt());
+        scanner.nextLine();
+
+        System.out.println("Please enter input 2:");
+        numbers.add(scanner.nextInt());
+        scanner.nextLine();
+
+        boolean repeat = true;
+        int counter = 2;
+
+        while (repeat) {
+            System.out.println("Do you wish to add another number? Y/N");
+            String answer = scanner.nextLine();
+            if (answer.equals("Y")) {
+                counter += 1;
+                System.out.println("Please enter input " + counter + ":");
+                numbers.add(scanner.nextInt());
+                scanner.nextLine();
+            }
+            else if (answer.equals("N")){
+                repeat = false;
+            }
+            else {
+                System.out.println("Please enter a valid response");
+            }
+        }
+
+        System.out.println("Please enter operation (+ - * /):");
+        String operation = scanner.nextLine();
+        if (operation.equals("+")) {
+            for (int i = 0; i < numbers.size(); i++) {
+                result += numbers.get(i);
+            }
+        }
+        else if (operation.equals("-")){
+            result = numbers.get(0);
+            for (int i = 1; i < numbers.size(); i++) {
+                result -= numbers.get(i);
+            }
+        }
+        else if (operation.equals("*")) {
+            result = 1;
+            for (int i = 0; i < numbers.size(); i++) {
+                result *= numbers.get(i);
+            }
+        }
+        else if (operation.equals("/")) {
+            result = numbers.get(0);
+            for (int i = 1; i < numbers.size(); i++) {
+                result /= numbers.get(i);
+            }
+        }
+        System.out.println(result);
+    }
+}
