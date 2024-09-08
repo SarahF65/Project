@@ -1,0 +1,75 @@
+import mysql.connector
+from datetime import date
+
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="12345678910",
+    database="myDB"
+)
+
+
+def login(db):
+    while True:
+        ls = input("Please select to login (L) or sign in (S): ").strip().upper()
+
+        if ls == "L":
+            username = input("Please enter your username: ").strip()
+            password = input("Please enter your password: ").strip()
+
+            mycursor = mydb.cursor()
+            sql = "SELECT * FROM users WHERE username = %s"
+            mycursor.execute(sql, (username,))
+            myresult = mycursor.fetchall()
+
+            if myresult and password == myresult[0][2]:
+                print("Successfully logged in!")
+                mycursor.close()  # Close cursor
+                break  # Exit the loop if login is successful
+            else:
+                option = input(
+                    "Password or username incorrect. Please select try again (T) or exit (E): ").strip().upper()
+                if option == "E":
+                    print("Exiting the system.")
+                    mycursor.close()  # Close cursor
+                    break  # Exit the loop if the user chooses to exit
+
+        elif ls == "S":
+            username_new = input("Please enter your username: ").strip()
+            mycursor = mydb.cursor()
+            sql = "SELECT * FROM users WHERE username = %s"
+            mycursor.execute(sql, (username_new,))
+            myresult = mycursor.fetchall()
+
+            if not myresult:
+                password_new = input("Please enter your password: ").strip()
+                role_new = input("Please enter your role (librarian/student/teacher): ").strip().lower()
+                email_new = input("Please enter your email: ").strip().lower()
+                today = date.today()
+                sql = "INSERT INTO users (username, password, role, email, date_registered) VALUES (%s, %s, %s, %s, %s)"
+                values_enter = (username_new, password_new, role_new, email_new, today)
+                mycursor.execute(sql, values_enter)
+                mydb.commit()
+                print("Sign-in successful!")
+                mycursor.close()  # Close cursor
+                break
+            else:
+                option = input("Username used, please select to try again (T) or exit (E).").strip().upper()
+                if option == "E":
+                    mycursor.close()  # Close cursor
+                    break
+
+        else:
+            option = input(
+                "Invalid selection. Please choose to login (L) or sign in (S), or to exit (E).").strip().upper()
+            if option == "E":
+                break
+
+
+def librarian():
+    while True:
+        
+
+
+print("Welcome to the book system.")
+login(mydb)
